@@ -1,0 +1,55 @@
+graph TD
+    A[Iniciar PhantomGate] -->|--start| B{Verificar Privilégios}
+    B -->|Não Root| C[Erro: Executar como Root]
+    B -->|Root| D{Verificar Configuração}
+    
+    D -->|Usar Tor| E[Verificar Instalação do Tor]
+    E -->|Não Instalado| F[Instalar Tor]
+    E -->|Instalado| G[Configurar Tor]
+    F --> G
+    G --> H[Reiniciar Serviço Tor]
+    H --> I[Configurar iptables]
+    
+    D -->|Usar Proxies| J[Carregar Lista de Proxies]
+    J -->|Lista Vazia| K[Criar Arquivo de Exemplo]
+    J -->|Lista Carregada| L[Selecionar Proxy Inicial]
+    K --> L
+    
+    I --> M[Ativar Modo Privacidade]
+    L --> M
+    
+    M --> N[Verificar IP Atual]
+    
+    Z[Comando --auto] --> AA[Iniciar Rotação Automática]
+    AA --> AB[Trocar IP no Intervalo]
+    AB --> AC[Exibir Novo IP]
+    AC --> AB
+    
+    Y[Comando --new-ip] --> BA[Trocar IP]
+    BA -->|Tor| BB[Enviar Sinal HUP]
+    BA -->|Proxies| BC[Selecionar Próximo Proxy]
+    BB --> BD[Exibir Novo IP]
+    BC --> BD
+    
+    X[Comando --check-leaks] --> CA[Verificar Vazamentos DNS]
+    CA --> CB[Verificar Vazamentos WebRTC]
+    CB --> CC[Verificar Fingerprinting]
+    
+    W[Comando --stop] --> DA[Limpar Regras iptables]
+    DA --> DB[Desativar Modo Privacidade]
+    
+    V[Comando --add-proxy] --> EA[Solicitar Tipo de Proxy]
+    EA --> EB[Solicitar Endereço]
+    EB --> EC[Solicitar Credenciais]
+    EC --> ED[Adicionar à Lista]
+    ED --> EE[Salvar Lista Atualizada]
+    
+    classDef success fill:#d1f0c2,stroke:#59b300,stroke-width:2px;
+    classDef error fill:#ffcccc,stroke:#ff0000,stroke-width:2px;
+    classDef process fill:#c2e0f0,stroke:#0066cc,stroke-width:2px;
+    classDef command fill:#f0e8c2,stroke:#b38f00,stroke-width:2px;
+    
+    class M,N,BD,AC success;
+    class C,K error;
+    class B,D,E,F,G,H,I,J,L,AB,BB,BC,CA,CB,CC,DA,DB,EA,EB,EC,ED,EE process;
+    class A,Z,Y,X,W,V command;
